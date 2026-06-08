@@ -1,0 +1,386 @@
+SQL> 
+SQL> CREATE TABLE CUSTOMERS(
+  2  CUSTOMER_ID NUMBER PRIMARY KEY,
+  3  CUSTOMER_NAME VARCHAR2(100),
+  4  CITY VARCHAR2(50),
+  5  PHONE VARCHAR2(15)
+  6  );
+
+Table created.
+
+SQL> DESC CUSTOMERS;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ CUSTOMER_ID                               NOT NULL NUMBER
+ CUSTOMER_NAME                                      VARCHAR2(100)
+ CITY                                               VARCHAR2(50)
+ PHONE                                              VARCHAR2(15)
+
+
+SQL> --CREATE PRODUCT TABLE--
+SQL>  CREATE TABLE PRODUCTS(
+  2  PRODUCT_ID NUMBER PRIMARY KEY,
+  3  PRODUCT_NAME VARCHAR2(100),
+  4  CATEGORY VARCHAR2(50),
+  5  PRICE NUMBER(10,2),
+  6  STOCK NUMBER );
+
+Table created.
+
+SQL> DESC PRODUCTS;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PRODUCT_ID                                NOT NULL NUMBER
+ PRODUCT_NAME                                       VARCHAR2(100)
+ CATEGORY                                           VARCHAR2(50)
+ PRICE                                              NUMBER(10,2)
+ STOCK                                              NUMBER
+
+
+SQL>  CREATE TABLE ORDERS(
+  2   ORDER_ID NUMBER PRIMARY KEY,
+  3   CUSTOMER_ID NUMBER,
+  4   ORDER_DATE DATE,
+  5  CONSTRAINT FK_CUSTOMER
+  6  FOREIGN KEY (CUSTOMER_ID)
+  7  REFERENCES CUSTOMERS(CUSTOMER_ID));
+
+Table created.
+
+SQL> DESC ORDERS;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ORDER_ID                                  NOT NULL NUMBER
+ CUSTOMER_ID                                        NUMBER
+ ORDER_DATE                                         DATE
+ 
+SQL> 
+SQL> --CREATE ORDER_ITEMS TABLE
+SQL> CREATE TABLE ORDER_ITEMS(
+  2  ITEM_ID NUMBER PRIMARY KEY,
+  3  ORDER_ID NUMBER,
+  4  PRODUCT_ID NUMBER,
+  5  QUANTITY NUMBER,
+  6  TOTAL_PRICE NUMBER(10,2),
+  7  CONSTRAINT FK_ORDER
+  8  FOREIGN KEY (ORDER_ID)
+  9  REFERENCES ORDERS(ORDER_ID),
+ 10  CONSTRAINT FK_PRODUCT
+ 11  FOREIGN KEY (PRODUCT_ID)
+ 12  REFERENCES PRODUCTS(PRODUCT_ID));
+
+Table created.
+
+SQL> DESC ORDER_ITEMS;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ITEM_ID                                   NOT NULL NUMBER
+ ORDER_ID                                           NUMBER
+ PRODUCT_ID                                         NUMBER
+ QUANTITY                                           NUMBER
+ TOTAL_PRICE                                        NUMBER(10,2)
+
+SQL> --INSERT DATA INTO CUSTOMERS--
+SQL> INSERT INTO CUSTOMERS VALUES(1,'SWETHA','CHENNAI','9876543210');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMERS VALUES(2,'NIGI','BENGULORE','9876543211');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMERS VALUES(3,'DANISHA','COIMBATORE','9876543212');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMERS VALUES(4,'SARSHINI','MADURAI','9876543213');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMERS VALUES(5,'ADRIEL','THOOTHOOR','9876543214');
+
+1 row created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SET PAGES 200 LINES 200;
+SQL> SELECT * FROM CUSTOMERS;
+
+CUSTOMER_ID CUSTOMER_NAME                                                                                        CITY                                               PHONE                               
+----------- ---------------------------------------------------------------------------------------------------- -------------------------------------------------- ---------------                     
+          1 SWETHA                                                                                               CHENNAI                                            9876543210                          
+          2 NIGI                                                                                                 BENGULORE                                          9876543211                          
+          3 DANISHA                                                                                              COIMBATORE                                         9876543212                          
+          4 SARSHINI                                                                                             MADURAI                                            9876543213                          
+          5 ADRIEL                                                                                               THOOTHOOR                                          9876543214                          
+
+SQL> --INSERT DATA INTO PRODUCTS--
+SQL> 
+SQL> INSERT INTO PRODUCTS VALUES(101,'LAPTOP','ELECTRONICS',55000,10);
+
+1 row created.
+
+SQL> INSERT INTO PRODUCTS VALUES(102,'PHONE','ELECTRONICS',30000,20);
+
+1 row created.
+
+SQL> INSERT INTO PRODUCTS VALUES(103,'HEADSET','ACCESSORIES',2000,30);
+
+1 row created.
+
+SQL> INSERT INTO PRODUCTS VALUES(104,'CHARGER','ACCESSORIES',1000,40);
+
+1 row created.
+
+SQL> INSERT INTO PRODUCTS VALUES(105,'TABLET','ELECTRONICS',50000,15);
+
+1 row created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM PRODUCTS;
+
+PRODUCT_ID PRODUCT_NAME                                                                                         CATEGORY                                                PRICE      STOCK                
+---------- ---------------------------------------------------------------------------------------------------- -------------------------------------------------- ---------- ----------                
+       101 LAPTOP                                                                                               ELECTRONICS                                             55000         10                
+       102 PHONE                                                                                                ELECTRONICS                                             30000         20                
+       103 HEADSET                                                                                              ACCESSORIES                                              2000         30                
+       104 CHARGER                                                                                              ACCESSORIES                                              1000         40                
+       105 TABLET                                                                                               ELECTRONICS                                             50000         15                
+
+SQL> --INSERT DATA INTO ORDERS-
+SQL> INSERT INTO ORDERS VALUES(1001,1,'01-MAY-2026');
+
+1 row created.
+
+SQL> INSERT INTO ORDERS VALUES(1002,2,'03-MAY-2026');
+
+1 row created.
+
+SQL> INSERT INTO ORDERS VALUES(1003,3,'04-MAY-2026');
+
+1 row created.
+
+SQL> insert into orders values(1004,4,'10-MAY-2026');
+
+1 row created.
+
+SQL> insert into orders values(1005,5,'12-MAY-2026');
+
+1 row created.
+
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM ORDERS;
+
+  ORDER_ID CUSTOMER_ID ORDER_DAT                                                                                                                                                                        
+---------- ----------- ---------                                                                                                                                                                        
+      1001           1 01-MAY-26                                                                                                                                                                        
+      1002           2 03-MAY-26                                                                                                                                                                        
+      1003           3 04-MAY-26                                                                                                                                                                        
+      1004           4 10-MAY-26
+      1005           5 12-MAY-26
+
+SQL> INSERT INTO ORDER_ITEMS VALUES(1,1001,104,2,2000);
+
+1 row created.
+
+SQL> INSERT INTO ORDER_ITEMS VALUES(2,1002,103,2,4000);
+
+1 row created.
+
+SQL> INSERT INTO ORDER_ITEMS VALUES(3,1001,102,1,55000);
+
+1 row created.
+
+SQL> INSERT INTO ORDER_ITEMS VALUES(4,1003,105,1,50000);
+
+1 row created.
+
+SQL> INSERT INTO ORDER_ITEMS VALUES(5,1003,101,1,55000);
+
+1 row created.
+
+SQL> UPDATE ORDER_ITEMS
+  2  SET TOTAL_PRICE=30000
+  3  WHERE ITEM_ID=3;
+
+1 row updated.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM ORDER_ITEMS;
+
+   ITEM_ID   ORDER_ID PRODUCT_ID   QUANTITY TOTAL_PRICE                                                                                                                                                 
+---------- ---------- ---------- ---------- -----------                                                                                                                                                 
+         1       1001        104          2        2000                                                                                                                                                 
+         2       1002        103          2        4000                                                                                                                                                 
+         3       1001        102          1       30000                                                                                                                                                 
+         4       1003        105          1       50000                                                                                                                                                 
+         5       1003        101          1       55000                                                                                                                                                 
+
+SQL> --QUERY 1--TOTAL SALES
+SQL> SELECT SUM(TOTAL_PRICE) AS TOTAL_SALES FROM ORDER_ITEMS;
+
+TOTAL_SALES                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+     141000                                                                                                                                                                                             
+
+SQL> --CUSTOMER PURCHASE HISTORY--
+                                                                                                                                                                                                 
+SQL> SET PAGES 1000 LINES 1000;
+SQL> SELECT c.customer_name,
+  2         p.product_name,
+  3         oi.quantity
+  4  FROM customers c
+  5  JOIN orders o
+  6  ON c.customer_id = o.customer_id
+  7  JOIN order_items oi
+  8  ON o.order_id = oi.order_id
+  9  JOIN products p
+ 10  ON oi.product_id = p.product_id;
+
+CUSTOMER_NAME                                                                                        PRODUCT_NAME                                                                                           QUANTITY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+---------------------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+DANISHA                                                                                              LAPTOP                                                                                                        1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+SWETHA                                                                                               PHONE                                                                                                         1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+NIGI                                                                                                 HEADSET                                                                                                       2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+SWETHA                                                                                               CHARGER                                                                                                       2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+DANISHA                                                                                              TABLET                                                                                                        1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+SQL>  COLUMN customer_name FORMAT A15
+SQL> COLUMN product_name FORMAT A15
+
+
+SQL> SELECT c.customer_name,
+  2         p.product_name,
+  3         oi.quantity
+  4  FROM customers c
+  5  JOIN orders o
+  6  ON c.customer_id = o.customer_id
+  7  JOIN order_items oi
+  8  ON o.order_id = oi.order_id
+  9  JOIN products p
+ 10  ON oi.product_id = p.product_id;
+
+CUSTOMER_NAME   PRODUCT_NAME      QUANTITY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+--------------- --------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+DANISHA         LAPTOP                   1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+SWETHA          PHONE                    1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+NIGI            HEADSET                  2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+SWETHA          CHARGER                  2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+DANISHA         TABLET                   1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> --QUERY 3--TOP SELLING PRODUCTS--
+SQL> SELECT p.product_name,
+  2         SUM(oi.quantity) AS total_quantity
+  3  FROM products p
+  4  JOIN order_items oi
+  5  ON p.product_id = oi.product_id
+  6  GROUP BY p.product_name
+  7  ORDER BY total_quantity DESC;
+
+PRODUCT_NAME    TOTAL_QUANTITY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+--------------- --------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+CHARGER                      2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+HEADSET                      2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+LAPTOP                       1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+TABLET                       1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+PHONE                        1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+SQL> --QUERY 4 MONTHLY REVENUE-
+SQL>  SELECT TO_CHAR(o.order_date,'MONTH') AS month,
+  2         SUM(oi.total_price) AS revenue
+  3  FROM orders o
+  4  JOIN order_items oi
+  5  ON o.order_id = oi.order_id
+  6  GROUP BY TO_CHAR(o.order_date,'MONTH');
+
+MONTH        REVENUE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+--------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+MAY           141000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+ 
+SQL> SELECT c.customer_name,
+  2         p.product_name,
+  3         oi.quantity,
+  4         oi.total_price
+  5  FROM customers c
+  6  JOIN orders o
+  7  ON C.CUSTOMER_ID=O.CUSTOMER_ID
+  8  JOIN ORDER_ITEMS OI
+  9  ON O.ORDER_ID=OI.ORDER_ID
+ 10  JOIN PRODUCTS P
+ 11  ON OI.PRODUCT_ID=P.PRODUCT_ID;
+
+CUSTOMER_NAME   PRODUCT_NAME      QUANTITY TOTAL_PRICE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+--------------- --------------- ---------- -----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+DANISHA         LAPTOP                   1       55000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+SWETHA          PHONE                    1       30000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+NIGI            HEADSET                  2        4000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+SWETHA          CHARGER                  2        2000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+DANISHA         TABLET                   1       50000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+
+
+SQL> SELECT * FROM customers;
+
+CUSTOMER_ID CUSTOMER_NAME   CITY                                               PHONE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+----------- --------------- -------------------------------------------------- ---------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+          1 SWETHA          CHENNAI                                            9876543210                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+          2 NIGI            BENGULORE                                          9876543211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+          3 DANISHA         COIMBATORE                                         9876543212                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+          4 SARSHINI        MADURAI                                            9876543213                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+          5 ADRIEL          THOOTHOOR                                          9876543214                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+SQL> SELECT * FROM products;
+
+PRODUCT_ID PRODUCT_NAME    CATEGORY                                                PRICE      STOCK                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+---------- --------------- -------------------------------------------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+       101 LAPTOP          ELECTRONICS                                             55000         10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+       102 PHONE           ELECTRONICS                                             30000         20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+       103 HEADSET         ACCESSORIES                                              2000         30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+       104 CHARGER         ACCESSORIES                                              1000         40                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+       105 TABLET          ELECTRONICS                                             50000         15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+SQL> SELECT * FROM orders;
+
+  ORDER_ID CUSTOMER_ID ORDER_DAT                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+---------- ----------- ---------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+      1001           1 01-MAY-26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+      1002           2 03-MAY-26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+      1003           3 04-MAY-26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+SQL> SELECT * FROM order_items;
+
+   ITEM_ID   ORDER_ID PRODUCT_ID   QUANTITY TOTAL_PRICE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+---------- ---------- ---------- ---------- -----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+         1       1001        104          2        2000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+         2       1002        103          2        4000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+         3       1001        102          1       30000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+         4       1003        105          1       50000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+         5       1003        101          1       55000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+SQL> SELECT p.product_name,
+  2         SUM(oi.quantity) total_qty
+  3  FROM products p
+  4  JOIN order_items oi
+  5  ON p.product_id = oi.product_id
+  6  GROUP BY p.product_name;
+
+PRODUCT_NAME     TOTAL_QTY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+CHARGER                  2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+TABLET                   1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+PHONE                    1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+LAPTOP                   1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+HEADSET                  2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+
